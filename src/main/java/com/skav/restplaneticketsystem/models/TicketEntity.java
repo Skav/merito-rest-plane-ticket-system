@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class TicketEntity extends BaseEntity {
     private LocalDateTime purchaseDate;
 
-    // Bilet przypisany do pasażera i lotu [cite: 31]
     @ManyToOne
     @JoinColumn(name = "passenger_id")
     private PassengerEntity passenger;

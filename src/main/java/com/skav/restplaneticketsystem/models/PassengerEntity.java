@@ -15,5 +15,4 @@ public class PassengerEntity extends BaseEntity {
     private Long id;
     private String firstName;
     private String lastName;
-    // ID dziedziczone z BaseEntity to unikalny identyfikator [cite: 27]
 }

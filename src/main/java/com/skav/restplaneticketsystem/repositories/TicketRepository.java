@@ -8,6 +8,5 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 
-    // Pobiera wszystkie bilety powiązane z ID pasażera
     List<TicketEntity> findByPassengerId(Long passengerId);
 }

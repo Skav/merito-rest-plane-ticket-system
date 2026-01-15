@@ -26,7 +26,6 @@ public class FlightEntity extends BaseEntity {
     @JsonBackReference
     private AirlineEntity airline;
 
-    // Metoda biznesowa (Enkapsulacja logiki zmiany stanu)
     public void decreaseSeats() {
         if (this.availableSeats > 0) {
             this.availableSeats--;

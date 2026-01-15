@@ -11,8 +11,12 @@ import com.skav.restplaneticketsystem.repositories.TicketRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +33,38 @@ public class BookingService implements BookingServiceInterface {
     }
 
     @Override
+    public Optional<AirlineEntity> getAirlineById(Long id) {
+        return airlineRepository.findById(id);
+    }
+
+    @Override
+    public List<FlightEntity> getAllFlights() {
+        return flightRepository.findAll();
+    }
+
+    @Override
+    public Optional<FlightEntity> getFlightById(Long id) {
+        return flightRepository.findById(id);
+    }
+
+    @Override
     public List<FlightEntity> getFlightsByAirline(Long airlineId) {
-        // Metoda zdefiniowana w Twoim FlightRepository
         return flightRepository.findByAirlineId(airlineId);
+    }
+
+    @Override
+    public Optional<PassengerEntity> getPassengerById(Long id) {
+        return passengerRepository.findById(id);
+    }
+
+    @Override
+    public List<TicketEntity> getAllTickets() {
+        return ticketRepository.findAll();
+    }
+
+    @Override
+    public Optional<TicketEntity> getTicketById(Long id) {
+        return ticketRepository.findById(id);
     }
 
     @Override
@@ -43,7 +76,6 @@ public class BookingService implements BookingServiceInterface {
         PassengerEntity passenger = passengerRepository.findById(passengerId)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono pasażera o ID: " + passengerId));
 
-        // Wywołanie logiki hermetyzacji z encji Flight (zmniejszenie liczby miejsc)
         flight.bookSeat();
         flightRepository.save(flight);
 
@@ -63,5 +95,51 @@ public class BookingService implements BookingServiceInterface {
     @Override
     public PassengerEntity savePassenger(PassengerEntity passenger) {
         return passengerRepository.save(passenger);
+    }
+
+    @Override
+    public List<PassengerEntity> getAllPassengers() {
+        return passengerRepository.findAll();
+    }
+
+    @Override
+    public FlightEntity createFlight(FlightEntity flight) {
+        return flightRepository.save(flight);
+    }
+
+    @Override
+    public FlightEntity updateFlight(Long id, Map<String, Object> updates) {
+        FlightEntity flight = flightRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lot nie znaleziony"));
+
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "price" -> flight.setPrice(BigDecimal.valueOf(((Number) value).doubleValue()));
+                case "availableSeats" -> flight.setAvailableSeats((Integer) value);
+                case "destination" -> flight.setDestination((String) value);
+                case "origin" -> flight.setOrigin((String) value);
+            }
+        });
+
+        return flightRepository.save(flight);
+    }
+
+    @Override
+    public AirlineEntity createAirline(AirlineEntity airline) {
+        return airlineRepository.save(airline);
+    }
+
+    @Override
+    public AirlineEntity updateAirlinePatch(Long id, Map<String, Object> updates) {
+        AirlineEntity airline = airlineRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Linia lotnicza o ID " + id + " nie istnieje"));
+
+        updates.forEach((key, value) -> {
+            if ("name".equals(key)) {
+                airline.setName((String) value);
+            }
+        });
+
+        return airlineRepository.save(airline);
     }
 }

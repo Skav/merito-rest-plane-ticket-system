@@ -8,6 +8,5 @@ import java.util.List;
 @Repository
 public interface FlightRepository extends JpaRepository<FlightEntity, Long> {
 
-    // Metoda wygenerowana automatycznie przez Springa na podstawie nazwy
     List<FlightEntity> findByAirlineId(Long airlineId);
 }

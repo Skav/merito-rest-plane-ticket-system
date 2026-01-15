@@ -11,13 +11,12 @@ import java.util.List;
 @Table(name = "airlines")
 @Getter
 @Setter
-public class AirlineEntity extends BaseEntity { // Dziedziczenie
+public class AirlineEntity extends BaseEntity {
     @Id
     private Long id;
     private String name;
 
-    // Relacja 1:N (Kompozycja - loty należą do linii)
     @OneToMany(mappedBy = "airline", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference // Do obsługi JSON (żeby nie było pętli)
+    @JsonManagedReference
     private List<FlightEntity> flights = new ArrayList<>();
 }

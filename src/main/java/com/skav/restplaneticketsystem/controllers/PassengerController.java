@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/passengers")
@@ -15,14 +16,22 @@ public class PassengerController {
 
     private final BookingServiceInterface bookingService;
 
-    // Pobierz historię biletów pasażera
+    @GetMapping
+    public List<PassengerEntity> getAllPassengers() {
+        return bookingService.getAllPassengers();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<PassengerEntity> getPassengerById(@PathVariable Long id) {
+        return  bookingService.getPassengerById(id);
+    }
+
     @GetMapping("/{id}/tickets")
     public List<TicketEntity> getPassengerTickets(@PathVariable Long id) {
         return bookingService.getPassengerHistory(id);
     }
 
-    // Opcjonalnie: Dodawanie pasażera, żeby mieć kogoś w bazie
-    @PostMapping
+    @PostMapping("/create")
     public PassengerEntity createPassenger(@RequestBody PassengerEntity passenger) {
         return bookingService.savePassenger(passenger);
     }
