@@ -23,6 +23,19 @@ Uruchom kontener z bazą danych PostgreSQL poniższym poleceniem:
 docker run --name flight-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=flight_system -p 5432:5432 -d postgres
 ```
 
+Zaloguj sie i stworz baze "flight_system"
+```bash
+psql -U postgres -h localhost -p 5432 
+```
+```sql
+create database flight_system;
+```
+       
+Wgraj testowe dane [pobierz tutaj](./resources/placeholderData.sql):
+```bash
+psql -U postgres -h localhost -p 5432 < placeholderData.sql
+```
+
 Krok 2: Konfiguracja aplikacji
 
 Plik src/main/resources/application.properties powinien zawierać:
@@ -95,15 +108,15 @@ System opiera się na standardowych operacjach CRUD dla czterech głównych zaso
     GET /api/tickets/{id} – Pobiera szczegóły biletu.
 
 
-7. UML
-
-
-8. Przykładowe testy
+7. Przykładowe testy
 
 Dodanie linii lotniczej: curl -X POST http://localhost:8080/api/airlines -H "Content-Type: application/json" -d "{"name": "LOT"}"
 
 Aktualizacja ceny lotu (ID: 1): curl -X PATCH http://localhost:8080/api/flights/1 -H "Content-Type: application/json" -d "{"price": 450.0}"
 
-Plik do testów w postman:
+Plik do testów w postman: [pobierz](./resources/FlightSystemPostman.json)
 
+8 .UML
 
+![image info](./resources/uml1.png)
+![image info](./resources/uml2.png)
